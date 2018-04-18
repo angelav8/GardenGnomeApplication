@@ -3,6 +3,7 @@ package com.example.ange.gardengnome;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.util.Log;
@@ -14,6 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Moisture extends AppCompatActivity {
 
@@ -73,16 +76,33 @@ public class Moisture extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        })
+        });
 
 
     }
 
     private void showData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()) {
+            UserInformation userInformation = new UserInformation();
+            userInformation.setName(ds.child(userID).getValue(UserInformation.class).getName()); //set the name
+            userInformation.setEmail(ds.child(userID).getValue(UserInformation.class).getEmail()); //set the email
+            userInformation.setPhone_num(ds.child(userID).getValue(UserInformation.class).getPhone_num()); //set the phone_num
 
+            //display all the information
+            Log.d(TAG, "showData: name: " + userInformation.getName());
+            Log.d(TAG, "showData: email: " + userInformation.getEmail());
+            Log.d(TAG, "showData: phone_num: " + userInformation.getPhone_num());
+
+            ArrayList<String> array  = new ArrayList<>();
+            array.add(userInformation.getName());
+            array.add(userInformation.getEmail());
+            array.add(userInformation.getPhone_num());
+            ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,array);
+            mListView.setAdapter(adapter);
         }
     }
+
+
 
     @Override
     public void onStart() {
