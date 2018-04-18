@@ -28,7 +28,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="256dp"
-        tools:layout_editor_absoluteY="16dp">
+        tools:layout_editor_absoluteY="16dp"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,50 +111,38 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"></LinearLayout>
 
-                        <Button
-                            android:id="@+id/changeEmail"
-                            style="?android:textAppearanceSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_weight="1"
-                            android:background="@android:color/holo_green_dark"
-                            android:text="Change E-Mail"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/changeEmail"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/holo_green_dark"
+                        android:text="Change E-Mail"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
 
-                        <Button
-                            android:id="@+id/changePass"
-                            style="@style/?android:textAppearanceSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_weight="1"
-                            android:background="@android:color/holo_green_dark"
-                            android:text="Change Password"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                    <Button
+                        android:id="@+id/changePass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/holo_green_dark"
+                        android:text="Change Password"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/remove"
-                            style="?android:textAppearanceSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_weight="1"
-                            android:background="@android:color/holo_green_dark"
-                            android:text="Delete Account"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                    <Button
+                        android:id="@+id/send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/holo_green_dark"
+                        android:text="@string/btn_send"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
 
                     <ProgressBar
                         android:id="@+id/progressBar"
@@ -161,23 +150,58 @@
                         android:layout_height="30dp"
                         android:visibility="gone" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/holo_green_dark"
+                        android:text="@string/btn_remove"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
 
-                        <Button
-                            android:id="@+id/sign_out"
-                            style="?android:textAppearanceSmall"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_weight="1"
-                            android:background="@android:color/holo_green_dark"
-                            android:text="@string/btn_sign_out"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                    <Button
+                        android:id="@+id/change_email_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/change_email"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/change_password_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/change_password"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/sending_pass_reset_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/send_password_reset_email"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/remove_user_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/remove_user"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/sign_out"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/holo_green_dark"
+                        android:text="@string/btn_sign_out"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
