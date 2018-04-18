@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "101561770373",
+    "firebase_url": "https://monitoringapp-c5c2a.firebaseio.com",
+    "project_id": "monitoringapp-c5c2a",
+    "storage_bucket": "monitoringapp-c5c2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101561770373:android:18aed6901b9cd09b",
+        "android_client_info": {
+          "package_name": "com.example.ange.gardengnome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101561770373-4mtnk7rmq5eqc72t5ntkg66p0gald84u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsYXuonjWHWcOOLSMGWhHZmb6hl4IZrjg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
