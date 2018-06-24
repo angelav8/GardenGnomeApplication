@@ -8,15 +8,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+ import android.widget.ListView;
+ import android.widget.ProgressBar;
+ import android.widget.TextView;
+ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
 
-    public class Settings extends AppCompatActivity {
+public class Settings extends AppCompatActivity {
 
         private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
                 changeEmail, changePassword, sendEmail, remove, signOut;
@@ -25,6 +29,10 @@ import com.google.firebase.auth.FirebaseUser;
         private ProgressBar progressBar;
         private FirebaseAuth.AuthStateListener authListener;
         private FirebaseAuth auth;
+
+        TextView userIDShow;
+
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -35,28 +43,37 @@ import com.google.firebase.auth.FirebaseUser;
             toolbar.setTitle(getString(R.string.app_name));
             setSupportActionBar(toolbar);
 
+
             //get firebase auth instance
             auth = FirebaseAuth.getInstance();
 
             //get current user
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+
+                String uid = user.getUid();
+                TextView userIDShow = (TextView) findViewById(R.id.userIDShow);
+                userIDShow.setText("User ID: " + user.getUid());
+            }
 
             authListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
+
                     if (user == null) {
                         // user auth state is changed - user is null
                         // launch login activity
                         startActivity(new Intent(Settings.this, LoginActivity.class));
                         finish();
+
+
                     }
                 }
             };
 
             btnChangeEmail = (Button) findViewById(R.id.change_email_button);
             btnChangePassword = (Button) findViewById(R.id.change_password_button);
-            btnSendResetEmail = (Button) findViewById(R.id.sending_pass_reset_button);
             btnRemoveUser = (Button) findViewById(R.id.remove_user_button);
             changeEmail = (Button) findViewById(R.id.changeEmail);
             changePassword = (Button) findViewById(R.id.changePass);
@@ -169,19 +186,7 @@ import com.google.firebase.auth.FirebaseUser;
                 }
             });
 
-            btnSendResetEmail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    oldEmail.setVisibility(View.VISIBLE);
-                    newEmail.setVisibility(View.GONE);
-                    password.setVisibility(View.GONE);
-                    newPassword.setVisibility(View.GONE);
-                    changeEmail.setVisibility(View.GONE);
-                    changePassword.setVisibility(View.GONE);
-                    sendEmail.setVisibility(View.VISIBLE);
-                    remove.setVisibility(View.GONE);
-                }
-            });
+
 
             sendEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -238,6 +243,7 @@ import com.google.firebase.auth.FirebaseUser;
                     signOut();
                 }
             });
+
 
         }
 

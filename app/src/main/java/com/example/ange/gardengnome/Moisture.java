@@ -1,15 +1,15 @@
 package com.example.ange.gardengnome;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.util.Log;
+import android.widget.Spinner;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,62 +18,130 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class Moisture extends AppCompatActivity {
+public class Moisture extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private static final String TAG = "ViewDatabase";
-
-    private FirebaseDatabase mFirebaseDatabase;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference myRef;
-    private String userID;
-
-    private ListView mListView;
-
-
-
+    // Intialized everthing here
+    private Spinner spinner;
+    private static final String[] category = {"Moisture"};
+    int j = 0;
+    DatabaseReference ref;
+    Button currentstatus, lastWatered, checkTemp, datetempchecked;
+    ListView listView, listView2, listView3, listView4;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moisture);
 
-        mListView = (ListView) findViewById(R.id.listview);
-
-        mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
-        FirebaseUser user = mAuth.getCurrentUser();
-        userID = user.getUid();
-
-//        WebView myWebView = (WebView) findViewById(R.id.webview);
-//        myWebView.loadUrl("http://192.168.0.26/2.php");
+        // Loading text
+        pd = new ProgressDialog(Moisture.this);
+        pd.setMessage("loading");
 
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        // Get ListView object from xml
+        listView = (ListView) findViewById(R.id.list3);
+        listView2 = (ListView) findViewById(R.id.list2);
+        listView3 = (ListView) findViewById(R.id.list3);
+        listView4 = (ListView) findViewById(R.id.list4);
+
+        // Adding spinner reference and assign values
+        spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Moisture.this,
+                android.R.layout.simple_spinner_item, category);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+
+        // Added buttons references
+        currentstatus = (Button) findViewById(R.id.currentstatus);
+        lastWatered = (Button) findViewById(R.id.lastWatered);
+
+
+
+        currentstatus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    toastMessage("Successfully signed in with:" + user.getEmail());
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    toastMessage("Successfully signed out");;
-                }
+            public void onClick(View view) {
+                pd.show();
+
+                // Point to db to get values
+                DatabaseReference temp = ref.child("CurrentStatus");
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<String> data  = new ArrayList<>();
+
+                        //datasnapshot is a object that holds all the values that we got from db. We need to
+                        // loop through to read all of them
+                        for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                            String d = ""+singleSnapshot.getValue();
+                            data.add(d);
+                        }
+
+
+                        // Define a new Adapter
+                        // First parameter - Context
+                        // Second parameter - Layout for the row
+                        // Third parameter - ID of the TextView to which the data is written
+                        // Forth - the Array of data
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Moisture.this,
+                                android.R.layout.simple_list_item_1, android.R.id.text1, data);
+
+
+                        // Assign adapter to ListView
+                        listView.setAdapter(adapter);
+
+                        pd.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        pd.dismiss();
+                    }
+                };
+                temp.addListenerForSingleValueEvent(eventListener);
             }
-        };
-        
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                showData(dataSnapshot);
-            }
+        });
 
+
+        lastWatered.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onClick(View view) {
+                pd.show();
+
+                DatabaseReference temp = ref.child("LastWatered");
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<String> data  = new ArrayList<>();
+
+                        //datasnapshot is a object that holds all the values that we got from db. We need to
+                        // loop through to read all of them
+                        for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                            String d = ""+singleSnapshot.getValue();
+                            data.add(d);
+                        }
+
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Moisture.this,
+                                android.R.layout.simple_list_item_1, android.R.id.text1, data);
+
+
+                        // Assign adapter to ListView
+                        listView2.setAdapter(adapter);
+                        pd.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        pd.dismiss();
+                    }
+                };
+                temp.addListenerForSingleValueEvent(eventListener);
+
 
             }
         });
@@ -81,45 +149,23 @@ public class Moisture extends AppCompatActivity {
 
     }
 
-    private void showData(DataSnapshot dataSnapshot) {
-        for(DataSnapshot ds : dataSnapshot.getChildren()) {
-            UserInformation userInformation = new UserInformation();
-            userInformation.setName(ds.child(userID).getValue(UserInformation.class).getName()); //set the name
-            userInformation.setEmail(ds.child(userID).getValue(UserInformation.class).getEmail()); //set the email
-            userInformation.setPhone_num(ds.child(userID).getValue(UserInformation.class).getPhone_num()); //set the phone_num
 
-            //display all the information
-            Log.d(TAG, "showData: name: " + userInformation.getName());
-            Log.d(TAG, "showData: email: " + userInformation.getEmail());
-            Log.d(TAG, "showData: phone_num: " + userInformation.getPhone_num());
 
-            ArrayList<String> array  = new ArrayList<>();
-            array.add(userInformation.getName());
-            array.add(userInformation.getEmail());
-            array.add(userInformation.getPhone_num());
-            ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,array);
-            mListView.setAdapter(adapter);
+    // This listener is called when a value in selected on the spinner
+    //By default 0 is selected
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+
+        switch (position) {
+            case 0:
+                //when category 0 is select point the db to autumn data. Same for all
+                ref = FirebaseDatabase.getInstance().getReference().child("Status").child(category[0]);
+                break;
         }
     }
 
-
-
     @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
-
-    private void toastMessage(String message){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
 }
